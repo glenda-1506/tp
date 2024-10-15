@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ExpenseTracker {
     private List<Category> categories;
-    private List expenses;
+    private List<Expense> expenses;
 
     public ExpenseTracker() {
         this.categories = new ArrayList<>();
@@ -29,5 +29,18 @@ public class ExpenseTracker {
         Category newCategory = new Category(trimmedCategoryName);
         categories.add(newCategory);
         System.out.println("Category '" + newCategory + "' added successfully.");
+    }
+
+    public void listExpenses() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses recorded yet.");
+        } else {
+            int index = 1;
+            System.out.println("Listing all expenses:");
+            for (Expense expense: expenses) {
+                System.out.println(index + ". " + expense);
+                index += 1;
+            }
+        }
     }
 }
