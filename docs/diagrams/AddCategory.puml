@@ -1,31 +1,42 @@
 @startuml
 actor User
 participant Duke
-participant ExpenseTracker
+participant CategoryManager
+participant TrackerData
 participant Category
 
-User -> Duke: input ("add-category <categoryName>")
-Duke -> ExpenseTracker: addCategory(input)
+User -> Duke : "add-category [categoryName]"
+activate Duke
 
-activate ExpenseTracker
-ExpenseTracker -> ExpenseTracker: trim and format input\ncategoryName = formatInput(trimmedCategoryName)
+alt Category does not already exist
+    Duke -> CategoryManager : addCategory(TrackerData, categoryName)
+    activate CategoryManager
+    CategoryManager -> TrackerData : getCategories()
+    activate TrackerData
+    TrackerData --> CategoryManager : List<Category>
+    deactivate TrackerData
 
-ExpenseTracker -> ExpenseTracker: check if categoryName is empty
-alt categoryName is empty
-    ExpenseTracker -> User: print "Category name is empty!"
-else categoryName is not empty
-    ExpenseTracker -> ExpenseTracker: iterate over categories\nand compare formattedCategoryName
+    CategoryManager -> CategoryManager : formatInput(categoryName)
+    activate CategoryManager
+    CategoryManager --> CategoryManager : formattedCategoryName
+    deactivate CategoryManager
 
-    alt category already exists
-        ExpenseTracker -> User: print "Category '<categoryName>' already exists!"
-    else category does not exist
-        ExpenseTracker -> Category: new Category(formattedCategoryName)
-        activate Category
-        Category -> ExpenseTracker: return new Category instance
-        deactivate Category
+    CategoryManager -> Category : Category(formattedCategoryName)
+    activate Category
+    Category --> CategoryManager : Category object
+    deactivate Category
 
-        ExpenseTracker -> ExpenseTracker: add new Category to categories list
-        ExpenseTracker -> User: print "Category '<categoryName>' added successfully."
-    end
+    CategoryManager -> TrackerData : setCategories(updatedCategories)
+    activate TrackerData
+    TrackerData --> CategoryManager
+    deactivate TrackerData
+
+    CategoryManager --> Duke
+    deactivate CategoryManager
+    Duke --> User : "Category added successfully"
+else Category already exists
+    Duke --> User : "Category already exists."
 end
+deactivate Duke
+
 @enduml
