@@ -1,45 +1,52 @@
 @startuml
+
 actor User
 participant Duke
-participant ExpenseTracker
-participant Category
+participant ExpenseManager
+participant TrackerData
 participant Expense
+participant Category
 
-User -> Duke : input ("add-expense n/<name> a/<amount> c/<category>")
+User -> Duke : "add-expense n/[name] a/[amount] c/[category]"
 activate Duke
 
-Duke -> Duke : addExpenseRequest(input, expenseTracker)
-Duke -> Duke : Parse name, amount, category from input
-Duke -> ExpenseTracker : addExpense(name, amount, category)
-activate ExpenseTracker
+alt Valid input
+    Duke -> ExpenseManager : addExpense(TrackerData, name, amount, categoryName)
+    activate ExpenseManager
+    ExpenseManager -> TrackerData : getExpenses()
+    activate TrackerData
+    TrackerData --> ExpenseManager : List<Expense>
+    deactivate TrackerData
 
-ExpenseTracker -> ExpenseTracker : formatInput(categoryName)
-ExpenseTracker -> ExpenseTracker : Check if category exists in categories
+    ExpenseManager -> TrackerData : getCategories()
+    activate TrackerData
+    TrackerData --> ExpenseManager : List<Category>
+    deactivate TrackerData
 
-alt Category exists
-    ExpenseTracker -> Category : Retrieve existing category
-    activate Category
-    Category --> ExpenseTracker : return category
-    deactivate Category
-else Category does not exist
-    ExpenseTracker -> Category : Create new Category
-    activate Category
-    ExpenseTracker -> ExpenseTracker : Add new category to categories
-    Category --> ExpenseTracker : return new category
-    deactivate Category
+    alt Category exists
+        ExpenseManager -> ExpenseManager : formatInput(categoryName)
+        activate ExpenseManager
+        ExpenseManager --> ExpenseManager : formattedCategoryName
+        deactivate ExpenseManager
+    else Category does not exist
+        ExpenseManager -> Category : Category(formattedCategoryName)
+        activate Category
+        Category --> ExpenseManager : Category object
+        deactivate Category
+        ExpenseManager -> TrackerData : setCategories(updatedCategories)
+    end
+
+    ExpenseManager -> Expense : Expense(name, amount, existingCategory)
+    activate Expense
+    Expense --> ExpenseManager : Expense object
+    deactivate Expense
+
+    ExpenseManager -> TrackerData : setExpenses(updatedExpenses)
+    deactivate ExpenseManager
+    Duke --> User : "Expense added successfully"
+else Invalid input
+    Duke --> User : "Invalid input! Please provide name, amount, and category."
 end
-
-ExpenseTracker -> Expense : Create Expense(name, amount, existingCategory)
-activate Expense
-Expense --> ExpenseTracker : return expense
-deactivate Expense
-
-ExpenseTracker -> ExpenseTracker : Add Expense to expenses
-
-ExpenseTracker -> Duke : Print confirmation of added expense
-deactivate ExpenseTracker
-
-Duke -> User : Display success message
 deactivate Duke
 
 @enduml
