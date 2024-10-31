@@ -2,38 +2,36 @@
 
 actor User
 participant Duke
-participant ExpenseTracker
-participant Expense
+participant ExpenseManager
+participant TrackerData
 
-User -> Duke : input("delete-expense e/<index>")
+User -> Duke : "delete-expense e/[expenseIndex]"
 activate Duke
 
-Duke -> Duke : deleteExpenseRequest(input, expenseTracker)
+    Duke -> Duke : deleteExpenseRequest(delete-expense e/[expenseIndex], ExpenseManager, TrackerData)
+    activate Duke
 
-alt Invalid Input (Missing/Incorrect Index)
-    Duke -> User : Print "Invalid input! Please provide an expense index to delete."
-else Valid Input
-    Duke -> Duke : Parse expenseIndex from input
+alt Valid index
+    Duke -> ExpenseManager : deleteExpense(TrackerData, expenseIndex)
+    activate ExpenseManager
+    ExpenseManager -> TrackerData : getExpenses()
+    activate TrackerData
+    TrackerData --> ExpenseManager : List<Expense>
+    deactivate TrackerData
 
-    alt Parsing Error (Non-numeric index)
-        Duke -> User : Print "Error parsing the expense index. Please use correct format."
-    else Parsing Successful
-        Duke -> ExpenseTracker : deleteExpense(expenseIndex)
-        activate ExpenseTracker
+    ExpenseManager -> ExpenseManager : {assert valid index}
+    ExpenseManager -> ExpenseManager : validateIndex(expenseIndex)
+    activate ExpenseManager
+    ExpenseManager --> ExpenseManager : result
+    deactivate ExpenseManager
 
-        alt Invalid Expense Index (Out of bounds)
-            ExpenseTracker -> User : Print "Invalid index. Unable to delete expense."
-        else Valid Expense Index
-            ExpenseTracker -> ExpenseTracker : Remove expense from list
-            ExpenseTracker -> Expense : Retrieve removed expense
-            activate Expense
-            Expense --> ExpenseTracker : Return deleted expense details
-            deactivate Expense
-            ExpenseTracker -> User : Print "Deleted expense: <expense details>"
-        end
-        deactivate ExpenseTracker
-    end
+    ExpenseManager -> TrackerData : setExpenses(updatedExpenses)
+    deactivate ExpenseManager
+    Duke --> User : "Expense deleted successfully"
+else Invalid index
+    Duke --> User : "Invalid input! Please provide a valid expense index."
 end
+deactivate Duke
 deactivate Duke
 
 @enduml
