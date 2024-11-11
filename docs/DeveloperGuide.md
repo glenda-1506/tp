@@ -104,6 +104,16 @@ without disrupting other parts of the system, supporting a scalable and well-org
 ---
 
 ## Sequence Diagrams
+### add-expense
+### delete-expense
+### add-category
+### delete-category
+### tag-expense
+### set-budget
+### view-expenses
+### view-category
+### view-budget
+### help
 
 ---
 
