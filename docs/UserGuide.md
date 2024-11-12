@@ -51,12 +51,12 @@ For details on all available commands, refer to the Features section below.
 
    Example: `add-expense n/Coffee a/5.50 c/Food` is equivalent to `add-expense a/5.50 n/Coffee c/Food`. However, `n/Coffee add-expense a/5.50 c/Food` would produce an error.
 
-5. Extraneous parameters that appears after commands which do not take in parameters (such as `view-expenses` and `bye`) 
+5. Extraneous parameters that appear after commands which do not take in parameters (such as `view-expenses` and `bye`) 
    will be ignored.
 
    Example: If the command specifies `view-expenses 123`, it will be interpreted as `view-expenses`. However, `123 view-expense` would produce an error.
 
-6. Avoid using command prefixes (e.g., `n/`, `a/`, `c/`, etc.) and special characters `|` within parameter values, as they may interfere with parsing.
+6. Avoid using command prefixes (e.g., `n/`, `a/`, `c/`, etc.) and special character `|` within parameter values, as they may interfere with parsing.
 
    Example: `add-expense n/Coffee 2023/02/12 a/5.50 c/Food` is valid, but `n/Coffee a/s/a/a/a/ a/5.50 c/Food` is not,
    as `a/` is used within the `NAME` parameter, causing confusion with the `a/AMOUNT` prefix.
