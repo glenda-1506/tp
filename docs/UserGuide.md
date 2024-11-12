@@ -249,7 +249,7 @@ Example output:
 
 ### Exiting the program: bye
 Exits the program, and saves the data for that session.
-If the data file has yet to be created, this command would also create the data file.
+If the data file has yet to be created, this command would also create the data folder with the 2 data text files in it.
 
 Format:
 
