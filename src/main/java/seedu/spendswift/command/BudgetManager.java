@@ -13,75 +13,10 @@ import java.math.BigDecimal;
 
 
 //@@author kq2003
+/**
+ * Manages methods that are related to the budget class in the spendswift application.
+ */
 public class BudgetManager {
-    //    public int lastResetMonth;
-    //
-    //    public boolean isAutoResetEnabled = false;  // Default state
-    //
-    //    public BudgetManager() {
-    //        this.lastResetMonth = -1;
-    //        this.isAutoResetEnabled = false;
-    //    }
-    //
-    //    public boolean getAutoResetStatus() {
-    //        return this.isAutoResetEnabled;
-    //    }
-    //    public void toggleAutoReset() {
-    //        isAutoResetEnabled = !isAutoResetEnabled;
-    //        System.out.println(UI.SEPARATOR);
-    //        System.out.println("Automatic budget reset is now " + (isAutoResetEnabled ? "ON" : "OFF") + ".");
-    //        System.out.println(UI.SEPARATOR);
-    //    }
-    //
-    //    //@@author AdiMangalam
-    //    /**
-    //     * Checks if it is a new month and resets budgets if auto-reset is enabled.
-    //     *
-    //     * This method uses the current month to determine if a monthly budget reset
-    //     * should occur. If auto-reset is enabled and the month has changed since the
-    //     * last reset, it triggers a reset of all budgets and updates the last reset month.
-    //     */
-    //    public void checkAndResetBudgets(TrackerData trackerData) {
-    //
-    //        Calendar calendar = Calendar.getInstance();
-    //        int currentMonth = calendar.get(Calendar.MONTH);
-    //
-    //        if (isAutoResetEnabled && currentMonth != lastResetMonth) {
-    //            resetBudgets(trackerData);
-    //            lastResetMonth = currentMonth;
-    //        }
-    //    }
-    //
-    //    /**
-    //     * Manages the monthly budget reset process.
-    //     *
-    //     * This method is intended to be called periodically to ensure budgets are reset
-    //     * at the start of a new month if necessary. It delegates the actual reset logic
-    //     * to the checkAndResetBudgets method, which handles auto-reset checks.
-    //     */
-    //    public void manageMonthlyReset(TrackerData trackerData) {
-    //        checkAndResetBudgets(trackerData);
-    //    }
-    //
-    //    /**
-    //     * Resets the budget limits for all categories.
-    //     *
-    //     * This method iterates over all budgets in the tracker and resets each budget's
-    //     * limit as per the current configuration. By default, it maintains the same limit
-    //     * for each budget, but the reset logic can be adjusted if needed.
-    //     */
-    //    public void resetBudgets(TrackerData trackerData) {
-    //        Map<Category, Budget> budgets = trackerData.getBudgets();
-    //
-    //        for (Budget budget : budgets.values()) {
-    //            // Resetting the budget logic can be adjusted as needed
-    //            budget.setLimit(budget.getLimit()); // For now, just maintaining the same limit
-    //        }
-    //
-    //        trackerData.setBudgets(budgets);
-    //        SuccessMessage.printBudgetReset();
-    //    }
-
 
     //@@author MayFairMI6
     /**
@@ -96,8 +31,6 @@ public class BudgetManager {
      * @param categoryName The name of the category to set the budget for
      * @param limit The budget limit to be set for the category (in dollars)
      */
-
-
     public static void setBudgetLimit(TrackerData trackerData, String categoryName, double limit) {
         // Adjusted for potentially enormous values typical in some currencies
         final BigDecimal maxLimit = new BigDecimal("1000000000000000"); // 1 quadrillion for example
@@ -137,13 +70,17 @@ public class BudgetManager {
         trackerData.setBudgets(budgets);
     }
 
-    //    //@author MayFairMI6
-    //    public int getLastResetMonth() {
-    //        return lastResetMonth;
-    //    }
-
 
     //@@author kq2003
+    /**
+     * Helper function to handle the user request to set a budget limit for a category.
+     * Parses the input to extract category name and limit, validates the values,
+     * and delegates the operation to setBudgetLimit.
+     *
+     * @param input         The user input containing the category and budget limit.
+     * @param budgetManager The {@code BudgetManager} instance to handle the request.
+     * @param trackerData   The {@code TrackerData} containing the current categories and budgets.
+     */
     public void setBudgetLimitRequest(String input, BudgetManager budgetManager, TrackerData trackerData) {
         try {
             InputParser parser = new InputParser();
@@ -169,13 +106,8 @@ public class BudgetManager {
             ErrorMessage.printParsingError();
         }
     }
-    //
-    //    //@@author MayFairMI6
-    //    public void simulateMonthChange() {
-    //        Calendar calendar = Calendar.getInstance();
-    //        lastResetMonth = (calendar.get(Calendar.MONTH) + 1) % 12;  // Simulate advancing by one month
-    //    }
-    //@@author MayFairMI6
+
+
     /**
      * Displays the current budget status for each category.
      *

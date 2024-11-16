@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'checkstyle'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.10.0'
+    okhttpVersion = '4.11.0' // Update to the latest stable version as needed
+    gsonVersion = '2.10.1' // Update to the latest stable version as needed
+    slf4jVersion = '2.0.9'
+    logbackVersion = '1.4.11'
+}
+
+dependencies {
+    // JUnit 5 for testing
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}" // Add this line
+
+    // Other dependencies
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+        showStandardStreams = false
+    }
+}
+
+application {
+    mainClass.set("seedu.spendswift.SpendSwift")
+}
+
+shadowJar {
+    archiveBaseName.set("spendswift")
+    archiveClassifier.set("")
+}
+
+checkstyle {
+    toolVersion = '10.2'
+    // Optionally, specify a Checkstyle config file
+    // configFile = file("config/checkstyle/checkstyle.xml")
+}
+
+run {
+    standardInput = System.in
+    enableAssertions = true
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+

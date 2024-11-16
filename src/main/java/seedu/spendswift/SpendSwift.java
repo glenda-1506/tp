@@ -12,7 +12,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Entry point for the SpendSwift application.
+ * Manages initialization of data, user interface, and application logic.
+ */
 public class SpendSwift {
+
+    /**
+     * The main method for running the spendswift application.
+     */
     public static void main(String[] args) throws IOException {
         String folderPath = "spendswift";
         String expenseFilePath = folderPath + "/expense.txt";
@@ -53,6 +61,11 @@ public class SpendSwift {
         }
     }
 
+    /**
+     * Creates a file if it does not already exist. Prints error if otherwise.
+     *
+     * @param filePath The path of the created file.
+     */
     private static void createFileIfNotExists(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) {

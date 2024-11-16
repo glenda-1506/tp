@@ -43,7 +43,7 @@ public class CategoryManager {
      * @param input The user input that is going to be parsed, with details.
      * @param trackerData The{@code TrackerData} object containing necessary information.
      */
-    public void addCategory(String input, TrackerData trackerData) {
+    public static void addCategory(String input, TrackerData trackerData) {
         InputParser parser = new InputParser();
         String categoryName = parser.parseCategory(input);
 
@@ -121,7 +121,7 @@ public class CategoryManager {
      * @param input         The user input containing the category name.
      * @param trackerData   The {@code TrackerData} object containing the categories.
      */
-    public void deleteCategory(String input, TrackerData trackerData) {
+    public static void deleteCategory(String input, TrackerData trackerData) {
         InputParser parser = new InputParser();
         String categoryName = parser.parseCategory(input);
 
